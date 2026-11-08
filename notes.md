@@ -9,15 +9,16 @@ cs231n focus: image classification\
 \
 **<font size=4>Lec3: Loss Functions and Optimization</font>**\
 1.**Multiclass SVM loss** [SVM之Hinge Loss解释][1]
-$$\begin{aligned}
-  L_i &=\sum_{j\neq y_i} 
+```math
+\begin{aligned}
+L_i &= \sum_{j \neq y_i}
 \begin{cases}
-  0 & if  s_{y_i}\ge s_j+1\\
-  s_j-s_{y_i}+1 & otherwise
+0, & \text{if } s_{y_i} \ge s_j + 1 \\
+s_j - s_{y_i} + 1, & \text{otherwise}
 \end{cases} \\
-&=\sum_{j\neq y_i}max(0, s_j-s_{y_i}+1)
+&= \sum_{j \neq y_i} \max(0, s_j - s_{y_i} + 1)
 \end{aligned}
-$$
+```
 
 2.**Regularization**\
 <img src="pics/Regularization.png" width = "400" height = "200"> \
@@ -53,9 +54,9 @@ Gradients add at branches
 the spatial structure
 <img src="pics/filters.png" width = "500" height = "250"> \
 ConvNet is a sequence of Convolutional Layers, interspersed with activation functions(eg.ReLu).
-filter: receptive field.\
+filter: receptive field.
 
-2.**pooling layer**(没有引入参数)
+2.**pooling layer**(没有引入参数)\
 <img src="pics/pooling layer.png" width = "420" height = "250">
 - max pooling:
 <img src="pics/max pooling.png" width = "500" height = "200"> 
@@ -64,7 +65,7 @@ filter: receptive field.\
 - ConvNets stack CONV,POOL,FC layers
 - Trend towards smaller filters and deeper architectures
 - Trend towards getting rid of POOL/FC layers (just CONV)
-- Typical architectures look like [(CONV-RELU)*N-POOL?]*M-(FC-RELU)*K,SOFTMAX where N is usually up to ~5, M is large, 0 <= K <= 2.
+- Typical architectures look like [(CONV-RELU)*N-POOL?]*M-(FC-RELU)*K, SOFTMAX where N is usually up to ~5, M is large, 0 <= K <= 2.
 - but recent advances such as ResNet/GoogLeNet challenge this paradigm
 
 \
@@ -103,8 +104,9 @@ babysitting the learning process, parameter updates, hyperparameter optimization
 - Try out tanh but don’t expect much
 - Don’t use sigmoid
 
-2.**Data Preprocessing**\
-<img src="pics/image preprocess.png" width = "400" height = "200">\
+2.**Data Preprocessing**
+
+<img src="pics/image preprocess.png" width = "400" height = "200">
 
 3.**Weight Initialization**\
 (1) ``W=0``\
@@ -146,7 +148,7 @@ The mean/std are not computed based on the batch. Instead, a single fixed empiri
 (1)**Cross-validation strategy**\
 **coarse -> fine** cross-validation in stages\
 **First stage**: only a few epochs to get rough idea of what params work\
-**Second stage**: longer running time, finer search … (repeat as necessary)
+**Second stage**: longer running time, finer search … (repeat as necessary)\
 *Tip for detecting explosions in the solver:
 If the cost is ever > 3 * original cost, break out early*\
 (2)**Random Search vs. Grid Search**\
@@ -196,15 +198,15 @@ If the cost is ever > 3 * original cost, break out early*\
 <img src="pics/learning rate.png" width = "450" height = "220">
 
 6.**Second-Order Optimization**\
-second-order Taylor expansion:
+second-order Taylor expansion:\
 $$J(\theta)\approx J(\theta_0)+(\theta - \theta_0)^T\nabla _{\theta}J(\theta_0)+\frac{1}{2}(\theta - \theta_0)^T H(\theta - \theta_0)$$
-Solving for the critical point we obtain the **Newton parameter update**:
-$$ \theta^*=\theta_0-H^{-1}\nabla _{\theta}J(\theta_0) $$
+
+Solving for the critical point we obtain the **Newton parameter update**: $\theta^*=\theta_0-H^{-1}\nabla _{\theta}J(\theta_0)$\
 Pro: No hyperparameters! No learning rate!\
-Con: Hessian has O(N^2) elements Inverting takes O(N^3) N = (Tens or Hundreds of) Millions
+Con: Hessian has $O(N^2)$ elements; Inverting takes $O(N^3)$; N = (Tens or Hundreds of) Millions
 
 **Quasi-Newton methods** (BGFS most popular):
-instead of inverting the Hessian (O(n^3)), approximate inverse Hessian with rank 1 updates over time (O(n^2) each).\
+instead of inverting the Hessian $O(N^3)$, approximate inverse Hessian with rank 1 updates over time ($O(N^2)$ each).\
 **L-BFGS** (Limited memory BFGS): Does not form/store the full inverse Hessian.\
 -Does not work well for non-convex problems.\
 -Usually works very well in *full batch, deterministic mode/little stochasticity* i.e. if you have a single, deterministic f(x) then L-BFGS will probably work very nicely\
@@ -243,7 +245,7 @@ randomly drop layers from the network during training\
 1.**Transfer Learning with CNNs**\
 <img src="pics/transfer learning.png" width = "500" height = "220">\
 <img src="pics/transfer learning1.png" width = "500" height = "220">\
-2.**Transfer Learning with CNNs is pervasive**: use CNN pretrained on ImageNet and fine tune it or reinitialize part of it for task at hand\
+2.**Transfer Learning with CNNs is pervasive**: use CNN pretrained on ImageNet and fine tune it or reinitialize part of it for task at hand
 
 3.Deep learning frameworks provide a **“Model Zoo” of pretrained models** so you don’t need to train your own\
 Caffe: https://github.com/BVLC/caffe/wiki/Model-Zoo \
@@ -265,8 +267,10 @@ TensorFlow: https://github.com/tensorflow/models \
 - GoogLeNet
 - ResNet
   
-**AlexNet**是将CNN成功用于视觉任务的第一个模型；\
-**VGG和GoogLeNet**都诞生于Batch Normalization之前，因此都为了使deeper model收敛而额外做了工作，比如说VGG一开始是训练了11层，之后再随机地增加其他层不断调参得到最终的模型；GoogLeNet则在网络低层增加了auxiliary classifier，不是为了辅助分类，而是为了向网络低层注入梯度。\
+**AlexNet**是将CNN成功用于视觉任务的第一个模型；
+
+**VGG和GoogLeNet**都诞生于Batch Normalization之前，因此都为了使deeper model收敛而额外做了工作，比如说VGG一开始是训练了11层，之后再随机地增加其他层不断调参得到最终的模型；GoogLeNet则在网络低层增加了auxiliary classifier，不是为了辅助分类，而是为了向网络低层注入梯度。
+
 **ResNet**的Residual block起到两个作用：\
 (1)如果将Residual block中的参数都置为0，则这个Residual block就实现了一个identity mapping。因此可以在ResNet中加入l2 norm，因为加上参数的l2 norm会使参数趋于0，在常规的神经网络中，使参数趋于0并不make sense，但在ResNet中，就可以使模型习得有哪些层是不需要的，by driving the Residual block to identity mapping\
 (2)gradient highway for the gradient to flow backward through the entire network
@@ -280,18 +284,13 @@ TensorFlow: https://github.com/tensorflow/models \
 - DenseNet
 - FractalNet
 
-
 **<font size=4>Lec 10: RNN</font>**\
-1.**Recurrence formula**:
-$$
-h_t=f_W(h_{t-1}, x_t)\\
-h_t:\text{new state}\\
-h_{t-1}:\text{old state}\\
-x_t: \text{input}
-$$
-Eg. 
-$$h_t=tanh(W_{hh}h_{t-1}+W_{xh}x_t)\\
-y=W_{hy}h_t$$
+1.**Recurrence formula**:\
+$h_t=f_W(h_{t-1}, x_t), h_t:\text{new state}, h_{t-1}:\text{old state}, x_t: \text{input}$\
+Eg. \
+$h_t = \tanh(W_{hh}h_{t-1} + W_{xh}x_t)$\
+$y = W_{hy}h_t$
+
 <font color='brown'>Notice: the same function and the same set
 of parameters W are used at every time step.</font>
 
@@ -303,17 +302,19 @@ of parameters W are used at every time step.</font>
 SGD in the case of sequence
 
 4.**Multilayer RNNs**
-$$h_t^l=tanh \ W^l(\ 
+```math
+h_t^l=tanh \ W^l(\ 
   \begin{matrix}
   h_t^{l-1}\\
   h_{t-1}^l
   \end{matrix}
-  ), \ h\in\mathbb{R}^n, \ W^l\ [n\times 2n] $$
+  ), \ h\in\mathbb{R}^n, \ W^l\ [n\times 2n]
+```
 RNN模型的层数不会很深，一般2~4层
 
 5.**Vanilla RNN Gradient Flow**\
 <img src="pics/RNN grad.png" width = "500" height = "130">
-$$\text{Backpropagation from }h_t \text{to } h_{t-1} \text{multiplies by }W \text{(actually }W_{hh}^T )$$
+$$\text{Backpropagation from }h_t \text{to } h_{t-1} \text{multiplies by }W \text{(actually }W_{hh}^T )$$\
 Computing gradient of h0 involves many factors of W (and repeated tanh)\
 Largest singular value of W > 1: **Exploding gradients** -> **Gradient clipping**: Scale gradient if its norm is too big\
 Largest singular value of W < 1: **Vanishing gradients** -> Change RNN architecture
